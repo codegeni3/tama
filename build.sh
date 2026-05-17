@@ -8,4 +8,4 @@ echo "Compiling Python smart contract..."
 ./target/release/tama build examples/counter.py
 
 echo "To build the compiled contract to WASM, run:"
-echo "  cd soroban_contract && stellar contract build"
+echo "  cd counter_contract && stellar contract build"

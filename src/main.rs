@@ -42,20 +42,23 @@ fn main() {
         }
     };
 
+    let contract_name = path.file_stem()
+        .and_then(|s| s.to_str())
+        .unwrap_or("contract");
+    let project_dir = format!("{}_contract", contract_name);
+
     println!("Compiling Python contract: {}...", file_path);
 
     match tama::compile(&source) {
         Ok(rust_code) => {
-            let project_dir = "soroban_contract";
             if let Err(e) = fs::create_dir_all(format!("{}/src", project_dir)) {
                 eprintln!("Error: Failed to create project directories: {}", e);
                 process::exit(1);
             }
 
             // Write Cargo.toml for the contract
-            let cargo_toml = r#"
-[package]
-name = "soroban-contract"
+            let cargo_toml = format!(r#"[package]
+name = "{}"
 version = "0.1.0"
 edition = "2021"
 publish = false
@@ -75,7 +78,8 @@ debug-assertions = false
 panic = "abort"
 codegen-units = 1
 lto = true
-"#;
+"#, contract_name);
+
             if let Err(e) = fs::write(format!("{}/Cargo.toml", project_dir), cargo_toml) {
                 eprintln!("Error: Failed to write Cargo.toml: {}", e);
                 process::exit(1);
@@ -88,9 +92,9 @@ lto = true
             }
 
             println!("\nCompile Complete!");
-            println!("Soroban Rust project created in soroban_contract/");
-            println!("To build WASM: cd soroban_contract && stellar contract build");
-            println!("To deploy contract: stellar contract deploy --wasm soroban_contract/target/wasm32v1-none/release/soroban_contract.wasm --source <account> --network testnet");
+            println!("Soroban Rust project created in {}/", project_dir);
+            println!("To build WASM: cd {} && stellar contract build", project_dir);
+            println!("To deploy contract: stellar contract deploy --wasm {}/target/wasm32v1-none/release/{}.wasm --source <account> --network testnet", project_dir, contract_name.replace("-", "_"));
         }
         Err(err) => {
             eprintln!("\nCompiler Errors:\n{}", err);
