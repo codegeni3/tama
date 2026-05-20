@@ -2,6 +2,13 @@
 
 Tama is a Python-to-Soroban compiler, it compiles native Python smart contracts directly to highly-optimized standard Soroban output.
 
+### Features
+
+- **Native Python Syntax**: Write smart contracts using standard Python language constructs.
+- **Strict Sandbox Validation**: Built-in AST validator ensures your code is safe and deterministic.
+- **Dynamic Project Generation**: Automatically generates a complete Cargo project matching your contract name.
+- **Full IDE Support**: Includes the `tama` mock package for full type hinting and autocomplete.
+
 ### Prerequisites
 
 - Rust (latest stable)
@@ -23,14 +30,14 @@ This creates the compiler binary at `./target/release/tama`.
    ```bash
    ./target/release/tama build examples/counter.py
    ```
-   This creates a standard Rust Soroban SDK project in `soroban_contract/`.
+   This dynamically creates a standard Rust Soroban SDK project in `counter_contract/`.
 
 2. Build the contract to WASM:
    ```bash
-   cd soroban_contract
+   cd counter_contract
    stellar contract build
    ```
-   This compiles the project to `target/wasm32v1-none/release/soroban_contract.wasm`.
+   This compiles the project to `target/wasm32v1-none/release/counter.wasm`.
 
 ### Autocomplete Setup
 
