@@ -20,6 +20,7 @@ pub enum Instruction {
     Add { dest: String, left: Operand, right: Operand },
     Sub { dest: String, left: Operand, right: Operand },
     Mul { dest: String, left: Operand, right: Operand },
+    Assert { condition: Operand },
     Return { value: Option<Operand> },
 }
 

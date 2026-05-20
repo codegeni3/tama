@@ -78,6 +78,9 @@ fn validate_stmt(source: &str, stmt: &ast::Stmt, errors: &mut Vec<String>) {
                 validate_expr(source, value, errors);
             }
         }
+        ast::Stmt::Assert(a) => {
+            validate_expr(source, &a.test, errors);
+        }
         ast::Stmt::Import(imp) => {
             let mut allowed = false;
             if imp.names.len() == 1 {
@@ -250,6 +253,10 @@ fn transform_statement(stmt: ast::Stmt, body: &mut Vec<Instruction>, temp_count:
                 }
                 _ => {}
             }
+        }
+        ast::Stmt::Assert(a) => {
+            let cond_op = flatten_expression(&a.test, body, temp_count);
+            body.push(Instruction::Assert { condition: cond_op });
         }
         ast::Stmt::Return(r) => {
             let val_op = r.value.as_ref().map(|v| flatten_expression(v, body, temp_count));

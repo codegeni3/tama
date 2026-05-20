@@ -148,6 +148,15 @@ impl RustGenerator {
                     };
                     rust.push_str(&format!("        let {} = {} * {};\n", dest, l_str, r_str));
                 }
+                Instruction::Assert { condition } => {
+                    let cond_str = match condition {
+                        Operand::Const(Value::Int(i)) => i.to_string(),
+                        Operand::Const(Value::String(s)) => format!("symbol_short!(\"{}\")", s),
+                        Operand::Const(Value::Bool(b)) => b.to_string(),
+                        Operand::Var(name) => name.clone(),
+                    };
+                    rust.push_str(&format!("        assert!({} != 0, \"Assertion failed\");\n", cond_str));
+                }
                 Instruction::Return { value } => {
                     if let Some(val) = value {
                         let val_str = match val {
