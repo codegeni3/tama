@@ -32,6 +32,7 @@ impl RustGenerator {
                     let val_str = match value {
                         Operand::Const(Value::Int(i)) => i.to_string(),
                         Operand::Const(Value::String(s)) => format!("symbol_short!(\"{}\")", s),
+                        Operand::Const(Value::Bool(b)) => b.to_string(),
                         Operand::Var(name) => name.clone(),
                     };
                     rust.push_str(&format!(
@@ -43,16 +44,19 @@ impl RustGenerator {
                     let val_str = match value {
                         Expression::Const(Value::Int(i)) => i.to_string(),
                         Expression::Const(Value::String(s)) => format!("symbol_short!(\"{}\")", s),
+                        Expression::Const(Value::Bool(b)) => b.to_string(),
                         Expression::Var(v) => v.clone(),
                         Expression::Add(l, r) => {
                             let l_str = match l {
                                 Operand::Const(Value::Int(i)) => i.to_string(),
                                 Operand::Const(Value::String(s)) => format!("symbol_short!(\"{}\")", s),
+                                Operand::Const(Value::Bool(b)) => b.to_string(),
                                 Operand::Var(name) => name.clone(),
                             };
                             let r_str = match r {
                                 Operand::Const(Value::Int(i)) => i.to_string(),
                                 Operand::Const(Value::String(s)) => format!("symbol_short!(\"{}\")", s),
+                                Operand::Const(Value::Bool(b)) => b.to_string(),
                                 Operand::Var(name) => name.clone(),
                             };
                             format!("{} + {}", l_str, r_str)
@@ -61,11 +65,13 @@ impl RustGenerator {
                             let l_str = match l {
                                 Operand::Const(Value::Int(i)) => i.to_string(),
                                 Operand::Const(Value::String(s)) => format!("symbol_short!(\"{}\")", s),
+                                Operand::Const(Value::Bool(b)) => b.to_string(),
                                 Operand::Var(name) => name.clone(),
                             };
                             let r_str = match r {
                                 Operand::Const(Value::Int(i)) => i.to_string(),
                                 Operand::Const(Value::String(s)) => format!("symbol_short!(\"{}\")", s),
+                                Operand::Const(Value::Bool(b)) => b.to_string(),
                                 Operand::Var(name) => name.clone(),
                             };
                             format!("{} - {}", l_str, r_str)
@@ -74,11 +80,13 @@ impl RustGenerator {
                             let l_str = match l {
                                 Operand::Const(Value::Int(i)) => i.to_string(),
                                 Operand::Const(Value::String(s)) => format!("symbol_short!(\"{}\")", s),
+                                Operand::Const(Value::Bool(b)) => b.to_string(),
                                 Operand::Var(name) => name.clone(),
                             };
                             let r_str = match r {
                                 Operand::Const(Value::Int(i)) => i.to_string(),
                                 Operand::Const(Value::String(s)) => format!("symbol_short!(\"{}\")", s),
+                                Operand::Const(Value::Bool(b)) => b.to_string(),
                                 Operand::Var(name) => name.clone(),
                             };
                             format!("{} * {}", l_str, r_str)
@@ -87,6 +95,7 @@ impl RustGenerator {
                             let args_str: Vec<String> = args.iter().map(|arg| match arg {
                                 Operand::Const(Value::Int(i)) => i.to_string(),
                                 Operand::Const(Value::String(s)) => format!("symbol_short!(\"{}\")", s),
+                                Operand::Const(Value::Bool(b)) => b.to_string(),
                                 Operand::Var(name) => name.clone(),
                             }).collect();
                             format!("{}({})", name, args_str.join(", "))
@@ -98,11 +107,13 @@ impl RustGenerator {
                     let l_str = match left {
                         Operand::Const(Value::Int(i)) => i.to_string(),
                         Operand::Const(Value::String(s)) => format!("symbol_short!(\"{}\")", s),
+                        Operand::Const(Value::Bool(b)) => b.to_string(),
                         Operand::Var(name) => name.clone(),
                     };
                     let r_str = match right {
                         Operand::Const(Value::Int(i)) => i.to_string(),
                         Operand::Const(Value::String(s)) => format!("symbol_short!(\"{}\")", s),
+                        Operand::Const(Value::Bool(b)) => b.to_string(),
                         Operand::Var(name) => name.clone(),
                     };
                     rust.push_str(&format!("        let {} = {} + {};\n", dest, l_str, r_str));
@@ -111,11 +122,13 @@ impl RustGenerator {
                     let l_str = match left {
                         Operand::Const(Value::Int(i)) => i.to_string(),
                         Operand::Const(Value::String(s)) => format!("symbol_short!(\"{}\")", s),
+                        Operand::Const(Value::Bool(b)) => b.to_string(),
                         Operand::Var(name) => name.clone(),
                     };
                     let r_str = match right {
                         Operand::Const(Value::Int(i)) => i.to_string(),
                         Operand::Const(Value::String(s)) => format!("symbol_short!(\"{}\")", s),
+                        Operand::Const(Value::Bool(b)) => b.to_string(),
                         Operand::Var(name) => name.clone(),
                     };
                     rust.push_str(&format!("        let {} = {} - {};\n", dest, l_str, r_str));
@@ -124,11 +137,13 @@ impl RustGenerator {
                     let l_str = match left {
                         Operand::Const(Value::Int(i)) => i.to_string(),
                         Operand::Const(Value::String(s)) => format!("symbol_short!(\"{}\")", s),
+                        Operand::Const(Value::Bool(b)) => b.to_string(),
                         Operand::Var(name) => name.clone(),
                     };
                     let r_str = match right {
                         Operand::Const(Value::Int(i)) => i.to_string(),
                         Operand::Const(Value::String(s)) => format!("symbol_short!(\"{}\")", s),
+                        Operand::Const(Value::Bool(b)) => b.to_string(),
                         Operand::Var(name) => name.clone(),
                     };
                     rust.push_str(&format!("        let {} = {} * {};\n", dest, l_str, r_str));
@@ -138,6 +153,7 @@ impl RustGenerator {
                         let val_str = match val {
                             Operand::Const(Value::Int(i)) => i.to_string(),
                             Operand::Const(Value::String(s)) => format!("symbol_short!(\"{}\")", s),
+                            Operand::Const(Value::Bool(b)) => b.to_string(),
                             Operand::Var(name) => name.clone(),
                         };
                         rust.push_str(&format!("        return {};\n", val_str));

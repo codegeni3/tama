@@ -117,9 +117,9 @@ fn validate_expr(source: &str, expr: &ast::Expr, errors: &mut Vec<String>) {
     match expr {
         ast::Expr::Constant(c) => {
             match &c.value {
-                ast::Constant::Int(_) | ast::Constant::Str(_) => {}
+                ast::Constant::Int(_) | ast::Constant::Str(_) | ast::Constant::Bool(_) => {}
                 _ => {
-                    errors.push(format!("Line {}: Only integer and string literals are supported", line));
+                    errors.push(format!("Line {}: Only integer, string, and boolean literals are supported", line));
                 }
             }
         }
@@ -265,6 +265,7 @@ fn flatten_expression(expr: &ast::Expr, body: &mut Vec<Instruction>, temp_count:
             match &c.value {
                 ast::Constant::Int(i) => Operand::Const(Value::Int(i.to_i64().unwrap_or(0))),
                 ast::Constant::Str(s) => Operand::Const(Value::String(s.to_string())),
+                ast::Constant::Bool(b) => Operand::Const(Value::Bool(*b)),
                 _ => Operand::Const(Value::Int(0)),
             }
         }
