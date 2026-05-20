@@ -18,6 +18,8 @@ pub enum Instruction {
     StoreStorage { key: String, value: Operand },
     SetVar { name: String, value: Expression },
     Add { dest: String, left: Operand, right: Operand },
+    Sub { dest: String, left: Operand, right: Operand },
+    Mul { dest: String, left: Operand, right: Operand },
     Return { value: Option<Operand> },
 }
 
@@ -32,6 +34,8 @@ pub enum Expression {
     Const(Value),
     Var(String),
     Add(Operand, Operand),
+    Sub(Operand, Operand),
+    Mul(Operand, Operand),
     Call(String, Vec<Operand>),
 }
 

@@ -127,8 +127,8 @@ fn validate_expr(source: &str, expr: &ast::Expr, errors: &mut Vec<String>) {
         ast::Expr::BinOp(b) => {
             validate_expr(source, &b.left, errors);
             validate_expr(source, &b.right, errors);
-            if !matches!(b.op, ast::Operator::Add) {
-                errors.push(format!("Line {}: Unsupported operator, only '+' is supported", line));
+            if !matches!(b.op, ast::Operator::Add | ast::Operator::Sub | ast::Operator::Mult) {
+                errors.push(format!("Line {}: Unsupported operator, only '+', '-', and '*' are supported", line));
             }
         }
         ast::Expr::Call(c) => {
@@ -278,11 +278,18 @@ fn flatten_expression(expr: &ast::Expr, body: &mut Vec<Instruction>, temp_count:
                 format!("temp_{}", temp_count)
             };
             *temp_count += 1;
-            body.push(Instruction::Add {
-                dest: temp_name.clone(),
-                left,
-                right,
-            });
+            match b.op {
+                ast::Operator::Add => {
+                    body.push(Instruction::Add { dest: temp_name.clone(), left, right });
+                }
+                ast::Operator::Sub => {
+                    body.push(Instruction::Sub { dest: temp_name.clone(), left, right });
+                }
+                ast::Operator::Mult => {
+                    body.push(Instruction::Mul { dest: temp_name.clone(), left, right });
+                }
+                _ => {}
+            }
             Operand::Var(temp_name)
         }
         ast::Expr::Call(c) => {
